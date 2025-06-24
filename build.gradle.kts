@@ -1,15 +1,12 @@
-import com.google.protobuf.gradle.id
-
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
 	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("com.google.protobuf") version "0.9.4"
 }
 
 group = "dev.jerrykhw"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 java {
 	toolchain {
@@ -21,14 +18,19 @@ repositories {
 	mavenCentral()
 }
 
-extra["springGrpcVersion"] = "0.8.0"
-
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-	// GRPC
-	implementation("io.grpc:grpc-services")
-	implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+	// Spring core
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	// Kotlin + JSON
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	// Swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 
 	// HWP
 	implementation("kr.dogfoot:hwplib:1.1.10")
@@ -37,20 +39,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
 
-	// ENV
+	// Env
 	implementation("me.paulschwarz:spring-dotenv:4.0.0")
+
+	// Util
+	implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
 	// Test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("org.springframework.grpc:spring-grpc-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.grpc:spring-grpc-dependencies:${property("springGrpcVersion")}")
-	}
 }
 
 kotlin {
@@ -59,27 +57,10 @@ kotlin {
 	}
 }
 
-protobuf {
-	protoc {
-		artifact = "com.google.protobuf:protoc"
-	}
-	plugins {
-		id("grpc") {
-			artifact = "io.grpc:protoc-gen-grpc-java"
-		}
-	}
-	generateProtoTasks {
-		all().forEach {
-			it.plugins {
-				id("grpc") {
-					option("jakarta_omit")
-					option("@generated=omit")
-				}
-			}
-		}
-	}
-}
-
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.bootJar {
+    archiveFileName.set("app.jar")
 }

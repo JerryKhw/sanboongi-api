@@ -1,0 +1,12 @@
+.idea/
+*.iml
+out/
+.vscode/
+
+.DS_Store
+Thumbs.db
+
+*.log
+.env
+
+!gradle/wrapper/gradle-wrapper.jar

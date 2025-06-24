@@ -1,3 +1,17 @@
+app:
+  mode: ${APP_MODE}
+  security:
+    username: ${SWAGGER_USERNAME}
+    password: ${SWAGGER_PASSWORD}
+
 spring:
   application:
     name: sanboongi
+  profiles:
+    active: ${APP_MODE}
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
