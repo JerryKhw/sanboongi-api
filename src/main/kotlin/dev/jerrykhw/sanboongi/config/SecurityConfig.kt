@@ -53,3 +53,17 @@ class SecurityConfig(
         return InMemoryUserDetailsManager(user)
     }
 }
+
+@Configuration
+@EnableWebSecurity
+@Profile("prod")
+class NoSecurityConfig {
+
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
+            .csrf { it.disable() }
+        return http.build()
+    }
+}

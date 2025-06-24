@@ -29,8 +29,6 @@ class UsersService(
                     socialType = request.socialType
                 )
 
-//                Test
-
                 publicIdEntitySaver.saveWithNanoIdRetry(userRepository, user)
             }
             SocialType.APPLE -> TODO()
