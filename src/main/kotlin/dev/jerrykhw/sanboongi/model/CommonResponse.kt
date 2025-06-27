@@ -8,8 +8,3 @@ data class DataResponse<T>(
     val message: String,
     val data: T
 )
-
-data class TokenData(
-    val accessToken: String,
-    val refreshToken: String
-)

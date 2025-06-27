@@ -4,6 +4,14 @@ app:
     username: ${SWAGGER_USERNAME}
     password: ${SWAGGER_PASSWORD}
 
+jwt:
+  access:
+    secret: ${JWT_ACCESS_SECRET}
+    expiration: ${JWT_ACCESS_EXPIRATION_TIME}
+  refresh:
+    secret: ${JWT_REFRESH_SECRET}
+    expiration: ${JWT_REFRESH_EXPIRATION_TIME}
+
 spring:
   application:
     name: sanboongi

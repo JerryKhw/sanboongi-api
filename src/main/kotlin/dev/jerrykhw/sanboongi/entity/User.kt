@@ -12,15 +12,18 @@ data class User(
     val id: Long = 0,
 
     @Column(nullable = false, unique = true)
-    override var publicId: String,
+    override var publicId: String = "",
 
     @Column(nullable = false, length = 100)
-    val nickname: String,
+    val email: String = "",
+
+    @Column(nullable = false, length = 100)
+    val nickname: String = "",
 
     @Column(nullable = false)
-    val socialId: String,
+    val socialId: String = "",
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    val socialType: SocialType,
+    @Column(nullable = false, length = 20)
+    val socialType: SocialType = SocialType.KAKAO,
 ) : PublicIdEntity, BaseTimeEntity()

@@ -37,7 +37,7 @@ class SecurityConfig(
                     .anyRequest().permitAll()
             }
             .httpBasic(Customizer.withDefaults())
-            .csrf { csrf -> csrf.disable() } // 필요에 따라 CSRF 설정
+            .csrf { csrf -> csrf.disable() }
 
         return http.build()
     }
