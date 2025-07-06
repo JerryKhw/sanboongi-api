@@ -3,6 +3,7 @@ package dev.jerrykhw.sanboongi.module.user.users
 import dev.jerrykhw.sanboongi.entity.User
 import dev.jerrykhw.sanboongi.enums.SocialType
 import dev.jerrykhw.sanboongi.module.user.users.dto.SignUpRequest
+import dev.jerrykhw.sanboongi.module.user.users.dto.UpdateNicknameRequest
 import dev.jerrykhw.sanboongi.repository.UserRepository
 import dev.jerrykhw.sanboongi.util.nanoid.NanoId
 import dev.jerrykhw.sanboongi.util.nanoid.PublicIdEntitySaver
@@ -38,5 +39,17 @@ class UsersService(
 
             SocialType.APPLE -> TODO()
         }
+    }
+
+    fun leave(user: User) {
+        userRepository.deleteById(user.id)
+    }
+
+    fun updateNickname(user: User, request: UpdateNicknameRequest) {
+        userRepository.save(
+            user.copy(
+                nickname = request.nickname,
+            )
+        )
     }
 }

@@ -1,4 +1,5 @@
 package dev.jerrykhw.sanboongi.util.nanoid
+
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Component

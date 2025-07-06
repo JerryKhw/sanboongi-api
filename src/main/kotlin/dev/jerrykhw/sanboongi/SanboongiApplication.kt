@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SanboongiApplication
 
 fun main(args: Array<String>) {
-	runApplication<SanboongiApplication>(*args)
+    runApplication<SanboongiApplication>(*args)
 }

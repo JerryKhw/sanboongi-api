@@ -27,7 +27,7 @@ class AuthService(
                     throw ResponseStatusException(HttpStatus.NOT_FOUND, "not_found")
                 }
 
-               return user
+                return user
             }
 
             SocialType.APPLE -> TODO()

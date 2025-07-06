@@ -2,7 +2,6 @@ package dev.jerrykhw.sanboongi.util.jwt
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
@@ -24,10 +23,10 @@ class Jwt(
         get() = appMode != "local"
 
     private val domain: String?
-        get() = if(appMode != "local") "jerrykhw.dev" else null
+        get() = if (appMode != "local") "jerrykhw.dev" else null
 
     private val sameSite: String
-        get() = if(appMode != "local") "None" else "Lax"
+        get() = if (appMode != "local") "None" else "Lax"
 
 
     enum class TokenType { ACCESS, REFRESH }

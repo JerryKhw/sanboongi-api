@@ -26,4 +26,7 @@ data class User(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     val socialType: SocialType = SocialType.KAKAO,
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
+    val documents: List<Document> = mutableListOf()
 ) : PublicIdEntity, BaseTimeEntity()

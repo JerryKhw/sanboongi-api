@@ -20,7 +20,7 @@ class WebConfig(
                 "https://dev-sanboongi.jerrykhw.dev",
                 "https://sanboongi.jerrykhw.dev"
             )
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
             .allowedHeaders("*")
             .allowCredentials(true)
             .maxAge(3600)
