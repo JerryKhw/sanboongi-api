@@ -28,6 +28,8 @@ class Jwt(
     private val sameSite: String
         get() = if (appMode != "local") "None" else "Lax"
 
+    private val prefix: String
+        get() = if (appMode == "prod") "sb" else "sb_${appMode}"
 
     enum class TokenType { ACCESS, REFRESH }
 
@@ -45,7 +47,7 @@ class Jwt(
         val accessToken = generateToken(publicId, TokenType.ACCESS)
         val refreshToken = generateToken(publicId, TokenType.REFRESH)
 
-        val accessCookie: ResponseCookie = ResponseCookie.from("sb_access_token", accessToken)
+        val accessCookie: ResponseCookie = ResponseCookie.from("${prefix}_access_token", accessToken)
             .path("/")
             .sameSite(sameSite)
             .httpOnly(true)
@@ -54,7 +56,7 @@ class Jwt(
             .domain(domain)
             .build()
 
-        val refreshCookie: ResponseCookie = ResponseCookie.from("sb_refresh_token", refreshToken)
+        val refreshCookie: ResponseCookie = ResponseCookie.from("${prefix}_refresh_token", refreshToken)
             .path("/")
             .sameSite(sameSite)
             .httpOnly(true)
@@ -68,7 +70,7 @@ class Jwt(
     }
 
     fun resetToken(response: HttpServletResponse) {
-        val accessCookie: ResponseCookie = ResponseCookie.from("sb_access_token", "")
+        val accessCookie: ResponseCookie = ResponseCookie.from("${prefix}_access_token", "")
             .path("/")
             .sameSite(sameSite)
             .httpOnly(true)
@@ -77,7 +79,7 @@ class Jwt(
             .domain(domain)
             .build()
 
-        val refreshCookie: ResponseCookie = ResponseCookie.from("sb_refresh_token", "")
+        val refreshCookie: ResponseCookie = ResponseCookie.from("${prefix}_refresh_token", "")
             .path("/")
             .sameSite(sameSite)
             .httpOnly(true)
@@ -127,8 +129,8 @@ class Jwt(
     fun getPublicIdFromRequest(request: HttpServletRequest, type: TokenType): String? {
         val cookies = request.cookies ?: return null
         val tokenName = when (type) {
-            TokenType.ACCESS -> "sb_access_token"
-            TokenType.REFRESH -> "sb_refresh_token"
+            TokenType.ACCESS -> "${prefix}_access_token"
+            TokenType.REFRESH -> "${prefix}_refresh_token"
         }
 
         val token = cookies.firstOrNull { it.name == tokenName }?.value ?: return null
