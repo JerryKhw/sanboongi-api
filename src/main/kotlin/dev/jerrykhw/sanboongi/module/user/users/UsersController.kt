@@ -47,7 +47,7 @@ class UsersController(
         @CurrentUser user: User,
         @RequestBody request: UpdateNicknameRequest
     ): ResponseEntity<DefaultResponse> {
-        usersService.updateNickname(user, request)
+        usersService.updateNickname(user, request.nickname)
         return ResponseEntity.status(HttpStatus.OK).body(DefaultResponse("success"))
     }
 }

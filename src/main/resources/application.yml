@@ -12,11 +12,34 @@ jwt:
     secret: ${JWT_REFRESH_SECRET}
     expiration: ${JWT_REFRESH_EXPIRATION_TIME}
 
+r2:
+  url: ${R2_URL}
+  bucket:
+    public: ${R2_PUBLIC_BUCKET}
+    private: ${R2_PRIVATE_BUCKET}
+  access-id: ${R2_ACCESS_ID}
+  access-secret: ${R2_ACCESS_SECRET}
+
+rest:
+  template:
+    requestFactory:
+      trustSelfSigned: true
+
 spring:
   application:
     name: sanboongi
   profiles:
     active: ${APP_MODE}
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      prefix: ${REDIS_PREFIX}
+      username: ${REDIS_USERNAME}
+      password: ${REDIS_PASSWORD}
+      ssl:
+        enabled: true
 
   datasource:
     url: ${DB_URL}

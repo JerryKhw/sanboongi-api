@@ -14,4 +14,6 @@ data class GetDocumentData(
     val records: List<Map<String, Any>>,
     val updatedAt: LocalDateTime,
     val createdAt: LocalDateTime,
+    val shared: Boolean,
+    val isDownloadReady: Boolean,
 )

@@ -8,7 +8,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "documents")
+@Table(
+    name = "documents",
+    indexes = [
+        Index(name = "idx_shared", columnList = "shared")
+    ]
+)
 data class Document(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +46,17 @@ data class Document(
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
-    val records: List<Map<String, Any>> = emptyList(),
+    val records: List<Map<String, String>> = emptyList(),
 
     @Column(nullable = false, columnDefinition = "timestamptz")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-) : PublicIdEntity, BaseTimeEntity() {
-    @PreUpdate
-    fun onUpdate() {
-        updatedAt = LocalDateTime.now()
-    }
-}
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(nullable = true, columnDefinition = "timestamptz")
+    var downloadFileUploadedAt: LocalDateTime? = null,
+
+    @Column(nullable = true, columnDefinition = "timestamptz")
+    var shareFileUploadedAt: LocalDateTime? = null,
+
+    @Column(nullable = false)
+    val shared: Boolean = false,
+) : PublicIdEntity, BaseTimeEntity()

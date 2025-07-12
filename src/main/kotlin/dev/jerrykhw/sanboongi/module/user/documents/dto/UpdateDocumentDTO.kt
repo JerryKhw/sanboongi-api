@@ -9,5 +9,5 @@ data class UpdateDocumentRequest(
     val name: String,
     val birthDate: LocalDate,
     val verifier: String,
-    val records: List<Map<String, Any>>,
+    val records: List<Map<String, String>>,
 )

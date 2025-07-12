@@ -7,9 +7,15 @@ import dev.jerrykhw.sanboongi.model.DefaultResponse
 import dev.jerrykhw.sanboongi.module.user.documents.dto.GetDocumentData
 import dev.jerrykhw.sanboongi.module.user.documents.dto.GetDocumentsData
 import dev.jerrykhw.sanboongi.module.user.documents.dto.UpdateDocumentRequest
+import dev.jerrykhw.sanboongi.module.user.documents.dto.UpdateSharedRequest
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -54,6 +60,8 @@ class DocumentsController(
                     records = document.records,
                     updatedAt = document.updatedAt,
                     createdAt = document.createdAt,
+                    shared = document.shared,
+                    isDownloadReady = document.updatedAt == document.downloadFileUploadedAt
                 )
             )
         )
@@ -95,5 +103,44 @@ class DocumentsController(
     fun newDocument(@CurrentUser user: User): ResponseEntity<DataResponse<String>> {
         val document = documentsService.newDocument(user)
         return ResponseEntity.status(HttpStatus.CREATED).body(DataResponse("success", document.publicId))
+    }
+
+    @PostMapping("/{id}/download")
+    @Operation(
+        summary = "문서 다운로드",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                content = [Content(
+                    mediaType = "application/x-hwp",
+                    schema = Schema(type = "string", format = "binary")
+                )]
+            )
+        ]
+    )
+    fun downloadDocument(
+        @CurrentUser user: User,
+        @PathVariable("id") id: String,
+    ): ResponseEntity<ByteArray> {
+        val hwpBytes = documentsService.downloadDocument(user, id)
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.valueOf("application/x-hwp")
+        headers.setContentDispositionFormData("attachment", "document.hwp")
+        return ResponseEntity(hwpBytes, headers, HttpStatus.OK)
+    }
+
+    @PatchMapping("/{id}/shared")
+    @Operation(summary = "문서 공유 상태 변경")
+    fun updateShared(
+        @CurrentUser user: User,
+        @PathVariable id: String,
+        @RequestBody request: UpdateSharedRequest
+    ): ResponseEntity<DefaultResponse> {
+        documentsService.updateShared(user, id, request.shared)
+        return ResponseEntity.status(HttpStatus.OK).body(
+            DefaultResponse(
+                "success"
+            )
+        )
     }
 }

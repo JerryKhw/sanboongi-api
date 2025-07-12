@@ -45,10 +45,10 @@ class UsersService(
         userRepository.deleteById(user.id)
     }
 
-    fun updateNickname(user: User, request: UpdateNicknameRequest) {
+    fun updateNickname(user: User, nickname: String) {
         userRepository.save(
             user.copy(
-                nickname = request.nickname,
+                nickname = nickname,
             )
         )
     }
