@@ -14,6 +14,7 @@ jwt:
 
 r2:
   url: ${R2_URL}
+  public-url: ${R2_PUBLIC_URL}
   bucket:
     public: ${R2_PUBLIC_BUCKET}
     private: ${R2_PRIVATE_BUCKET}

@@ -17,6 +17,7 @@ class JwtAuthInterceptor(
         Pair("/auth/sign", "POST"),
         Pair("/auth/sign", "DELETE"),
         Pair("/users", "POST"),
+        Pair("/shared-documents/**", "GET"),
         Pair("/swagger-ui/**", "GET"),
         Pair("/v3/api-docs/**", "GET"),
         Pair("/swagger-ui.html", "GET")

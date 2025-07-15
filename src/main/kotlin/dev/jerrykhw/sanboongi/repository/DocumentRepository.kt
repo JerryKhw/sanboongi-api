@@ -8,5 +8,5 @@ interface DocumentRepository : JpaRepository<Document, Long> {
 
     fun findByUserIdAndPublicId(userId: Long, publicId: String): Document?
 
-    fun deleteAllByUserId(userId: Long)
+    fun findBySharedTrueAndPublicId(publicId: String): Document?
 }
