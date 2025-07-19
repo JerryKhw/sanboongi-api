@@ -1,6 +1,7 @@
 package dev.jerrykhw.sanboongi.worker
 
 import dev.jerrykhw.sanboongi.config.R2Config
+import dev.jerrykhw.sanboongi.config.RedisPublisher
 import dev.jerrykhw.sanboongi.entity.Document
 import dev.jerrykhw.sanboongi.repository.DocumentRepository
 import dev.jerrykhw.sanboongi.util.hwp.Hwp.getTablesFromSection
@@ -33,6 +34,7 @@ import java.util.Arrays
 @Service
 class DocumentQueueWorker(
     private val redisTemplate: StringRedisTemplate,
+    private val redisPublisher: RedisPublisher,
     private val documentRepository: DocumentRepository,
     private val s3Client: S3Client,
     @Value("\${spring.data.redis.prefix}") private val redisPrefix: String,
@@ -76,6 +78,7 @@ class DocumentQueueWorker(
         val objectKey = "hwp/${document.publicId}.hwp"
 
         var newDocument: Document = document
+        var isUpdate = false
 
         if (document.updatedAt != document.downloadFileUploadedAt) {
             val file = HWPReader.fromFile("src/main/resources/base.hwp")
@@ -156,6 +159,7 @@ class DocumentQueueWorker(
             newDocument = newDocument.copy(
                 downloadFileUploadedAt = document.updatedAt
             )
+            isUpdate = true
         }
 
         if (document.shared && document.updatedAt != document.shareFileUploadedAt) {
@@ -170,6 +174,7 @@ class DocumentQueueWorker(
             newDocument = newDocument.copy(
                 shareFileUploadedAt = document.updatedAt
             )
+            isUpdate = true
         } else if (document.shareFileUploadedAt != null) {
             s3Client.deleteObject(
                 DeleteObjectRequest.builder()
@@ -180,10 +185,15 @@ class DocumentQueueWorker(
             newDocument = newDocument.copy(
                 shareFileUploadedAt = null
             )
+            isUpdate = true
         }
 
-        documentRepository.save(
-            newDocument
-        )
+        if (isUpdate) {
+            documentRepository.save(
+                newDocument
+            )
+            val channel = "topic:document.${document.publicId}"
+            redisPublisher.publish(channel, "refresh")
+        }
     }
 }
