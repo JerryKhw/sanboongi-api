@@ -16,7 +16,7 @@ class WebConfig(
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
             .allowedOrigins(
-                "http://localhost:3000",
+                "http://localhost:3010",
                 "https://dev-sanboongi.jerrykhw.dev",
                 "https://sanboongi.jerrykhw.dev"
             )

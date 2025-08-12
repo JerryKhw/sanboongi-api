@@ -12,7 +12,7 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint("/ws")
             .setAllowedOriginPatterns(
-                "http://localhost:3000",
+                "http://localhost:3010",
                 "https://dev-sanboongi.jerrykhw.dev",
                 "https://sanboongi.jerrykhw.dev"
             )
