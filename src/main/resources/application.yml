@@ -47,3 +47,7 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+social:
+  apple:
+    client-id: ${SOCIAL_APPLE_CLIENT_ID}

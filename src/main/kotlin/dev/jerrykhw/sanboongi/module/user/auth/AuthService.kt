@@ -11,12 +11,13 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class AuthService(
+    private val social: Social,
     private val userRepository: UserRepository,
 ) {
     fun signIn(request: SignInRequest): User {
         when (request.socialType) {
             SocialType.KAKAO -> {
-                val id = Social.getKakaoInfo(request.socialToken)
+                val id = social.getKakaoInfo(request.socialToken)
 
                 val user = userRepository.findBySocialIdAndSocialType(
                     socialId = id,
@@ -30,7 +31,20 @@ class AuthService(
                 return user
             }
 
-            SocialType.APPLE -> TODO()
+            SocialType.APPLE -> {
+                val id = social.getAppleInfo(request.socialToken)
+
+                val user = userRepository.findBySocialIdAndSocialType(
+                    socialId = id,
+                    socialType = request.socialType,
+                )
+
+                if (user == null) {
+                    throw ResponseStatusException(HttpStatus.NOT_FOUND, "not_found")
+                }
+
+                return user
+            }
         }
     }
 }
